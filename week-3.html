@@ -799,7 +799,7 @@ function advMatchups(A){
       const a = T[g.away] || {}, h = T[g.home] || {}, qa = A.qbs[g.away] || {}, qh = A.qbs[g.home] || {};
       const ia = injChips(A, g.away), ih = injChips(A, g.home);
       const side = (team, chips, cls) => `<div class="injs ${cls}"><div class="injh">${badge(team, "sm")}
-          <span class="lbl">${esc(nick(team))} injuries</span></div>${chips || '<span class="none">None listed</span>'}</div>`;
+          <span class="lbl">Injuries</span></div>${chips || '<span class="none">None listed</span>'}</div>`;
       return `<div class="panel mcard" style="--i:${i}">
         <div class="mhead"><div class="side">${badge(g.away, "sm")}<b>${esc(nick(g.away))}</b></div>
           <div class="when">${esc(when(g.kickoff))}</div>
