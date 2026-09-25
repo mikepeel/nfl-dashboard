@@ -312,6 +312,13 @@ main{padding:28px 0 60px}
 .mrow.qb .l,.mrow.qb .r{font-weight:800;color:var(--text)}
 .qbn{display:block;font-size:10.5px;font-weight:600;color:var(--faint);letter-spacing:.02em}
 .inj{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.inj2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.injs{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+.injs.r{align-items:flex-end}
+.injh{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.injs.r .injh{flex-direction:row-reverse}
+.injh .lbl{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.injs .none{font-size:12px;color:var(--faint)}
 .st{font:800 10px Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:99px;white-space:nowrap}
 .st.Out,.st.IR,.st.PUP,.st.Sus,.st.NA{background:rgba(255,59,74,.16);color:#ff7b86;border:1px solid rgba(255,59,74,.4)}
 .st.Doubtful{background:rgba(255,138,0,.15);color:#ffb35c;border:1px solid rgba(255,138,0,.4)}
@@ -414,6 +421,9 @@ footer{color:var(--faint);font-size:12px;text-align:center;padding:30px 0 40px}
   .hstat{min-width:0;flex:1}
   .dgrid{grid-template-columns:minmax(0,1fr)}
   .mgrid{grid-template-columns:minmax(0,1fr)}
+  .inj2{grid-template-columns:minmax(0,1fr)}
+  .injs.r{align-items:flex-start}
+  .injs.r .injh{flex-direction:row}
   .mcard{padding:14px}
   .mrow{grid-template-columns:1fr minmax(96px,1.2fr) 1fr;font-size:13px}
   .atrow{padding:10px 12px}
@@ -787,7 +797,9 @@ function advMatchups(A){
   return `<div class="note2">Green marks the better number. How each team has played, not a prediction.</div>
     <div class="mgrid">` + games.map((g, i) => {
       const a = T[g.away] || {}, h = T[g.home] || {}, qa = A.qbs[g.away] || {}, qh = A.qbs[g.home] || {};
-      const chips = injChips(A, g.away) + injChips(A, g.home);
+      const ia = injChips(A, g.away), ih = injChips(A, g.home);
+      const side = (team, chips, cls) => `<div class="injs ${cls}"><div class="injh">${badge(team, "sm")}
+          <span class="lbl">${esc(nick(team))} injuries</span></div>${chips || '<span class="none">None listed</span>'}</div>`;
       return `<div class="panel mcard" style="--i:${i}">
         <div class="mhead"><div class="side">${badge(g.away, "sm")}<b>${esc(nick(g.away))}</b></div>
           <div class="when">${esc(when(g.kickoff))}</div>
@@ -802,7 +814,7 @@ function advMatchups(A){
         ${row("Explosive plays", a.off_explosive, h.off_explosive, "pct")}
         ${row("Pass rush pressure", a.pressure_rate, h.pressure_rate, "pct")}
         ${row("Turnover margin", a.turnover_margin_pg, h.turnover_margin_pg, "signed")}
-        ${chips ? `<div class="inj">${chips}</div>` : ""}
+        ${ia || ih ? `<div class="inj2">${side(g.away, ia, "l")}${side(g.home, ih, "r")}</div>` : ""}
       </div>`;
     }).join("") + `</div>`;
 }
